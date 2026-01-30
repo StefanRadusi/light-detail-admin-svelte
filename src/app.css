@@ -1,0 +1,50 @@
+:root {
+	/* Colors */
+	--color-primary: #f1b434;
+	--color-success: #22c55e;
+	--color-warning: #f59e0b;
+	--color-error: #ef4444;
+
+	--color-text: #1e293b;
+	--color-text-muted: #64748b;
+	--color-background: #ffffff;
+	--color-surface: #f8fafc;
+	--color-border: #e2e8f0;
+	--color-bg-gray: #e5e7eb;
+
+	/* Fonts */
+	--font-sans: Futura, Hind, Arial, sans-serif;
+
+	/* Font sizes */
+	--font-size-title: 32px;
+	--font-size-subtitle: 20px;
+	--font-size-body: 16px;
+
+	--box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+html,
+body {
+	font-family: var(--font-sans);
+	color: var(--color-text);
+	background-color: var(--color-background);
+	line-height: 1.5;
+}
+
+.text-title {
+	font-size: var(--font-size-title);
+}
+
+.text-subtitle {
+	font-size: var(--font-size-subtitle);
+}
+
+.text-body {
+	font-size: var(--font-size-body);
+}
