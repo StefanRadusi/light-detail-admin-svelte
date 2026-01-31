@@ -6,11 +6,13 @@
 	let {
 		children,
 		loading = false,
+		variant = 'primary',
 		...rest
-	}: { children: Snippet; loading?: boolean } & HTMLButtonAttributes = $props();
+	}: { children: Snippet; loading?: boolean; variant?: 'primary' | 'secondary' | 'danger' } & HTMLButtonAttributes =
+		$props();
 </script>
 
-<button {...rest} disabled={loading || rest.disabled}>
+<button class:secondary={variant === 'secondary'} class:danger={variant === 'danger'} {...rest} disabled={loading || rest.disabled}>
 	<span class="content" class:hidden={loading}>
 		{@render children()}
 	</span>
@@ -22,7 +24,7 @@
 <style>
 	button {
 		position: relative;
-		padding: 12px;
+		padding: 8px;
 		background-color: var(--color-primary);
 		color: var(--color-text);
 		border: none;
@@ -31,10 +33,13 @@
 		font-weight: 600;
 		cursor: pointer;
 		transition: opacity 0.2s;
+		display: flex;
 	}
 
 	.content {
+		display: flex;
 		transition: opacity 0.2s;
+		align-items: center;
 	}
 
 	.content.hidden {
@@ -56,5 +61,15 @@
 	button:disabled {
 		opacity: 0.6;
 		cursor: not-allowed;
+	}
+
+	button.secondary {
+		background-color: transparent;
+		border: 2px solid var(--color-primary);
+		color: var(--color-primary);
+	}
+
+	button.danger {
+		background-color: var(--color-danger, #dc2626);
 	}
 </style>

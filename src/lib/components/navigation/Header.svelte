@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import { LogOut } from '@lucide/svelte';
-	import { Row, Title, Subtitle, Body } from '$lib';
+	import { Title, Subtitle, Body, IconButton } from '$lib';
 
 	const authNavItems = [
 		{ href: '/residential', label: 'Residential' },
@@ -22,25 +22,25 @@
 </script>
 
 <header>
-	<Row class="header-content">
-		<Row class="logo">
+	<div class="flex-row header-content">
+		<div class="flex-row logo">
 			<Title class="logo-light">Light Detail</Title>
 			<span class="logo-separator"></span>
 			<Body class="logo-admin">ADMIN</Body>
-		</Row>
+		</div>
 
-		<Row class="nav">
+		<div class="flex-row nav">
 			{#each navItems as { href, label }}
 				<a {href} class:active={page.url.pathname.startsWith(href)}><Subtitle>{label}</Subtitle></a>
 			{/each}
-		</Row>
+		</div>
 
 		{#if !isLoginPage}
-			<button class="logout" aria-label="Log out" onclick={handleLogout}>
-				<LogOut size={20} color="white" />
-			</button>
+			<IconButton class="logout" aria-label="Log out" onclick={handleLogout}>
+				<LogOut size={20} />
+			</IconButton>
 		{/if}
-	</Row>
+	</div>
 </header>
 
 <style>
@@ -48,7 +48,9 @@
 		background-image: url('/images/header-bg.webp');
 		background-size: cover;
 		background-position: center;
-		position: relative;
+		position: sticky;
+		top: 0;
+		z-index: 100;
 		display: flex;
 	}
 
@@ -59,7 +61,7 @@
 		background: linear-gradient(to right, rgba(0, 0, 0, 0.7), transparent);
 	}
 
-	header :global(.header-content) {
+	.header-content {
 		position: relative;
 		align-items: center;
 		padding: 16px 32px;
@@ -67,11 +69,11 @@
 		flex: 1;
 	}
 
-	header :global(.nav) {
+	.nav {
 		gap: 24px;
 	}
 
-	header :global(.logo) {
+	.logo {
 		gap: 16px;
 	}
 
@@ -88,27 +90,17 @@
 		color: white;
 	}
 
-	header :global(.nav a) {
+	.nav a {
 		color: white;
 		text-decoration: none;
 	}
 
-	header :global(.nav a:hover),
-	header :global(.nav a.active) {
+	.nav a:hover,
+	.nav a.active {
 		color: var(--color-primary);
 	}
 
-	.logout {
+	.header-content :global(.logout) {
 		margin-left: auto;
-		background: none;
-		border: none;
-		cursor: pointer;
-		color: #000;
-		padding: 8px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		border-radius: 4px;
-		background-color: rgba(0, 0, 0, 0.6);
 	}
 </style>

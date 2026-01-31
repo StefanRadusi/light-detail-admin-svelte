@@ -99,4 +99,8 @@
 		color: var(--color-error);
 		text-align: center;
 	}
+
+	.login-form :global(button) {
+		justify-content: center;
+	}
 </style>

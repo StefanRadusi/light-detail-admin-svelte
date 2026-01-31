@@ -1,41 +1,45 @@
 import { apiRequest } from './client';
 import type { Project, ProjectInput, ProjectUpdate, ProjectOrder, ProjectType, MessageResponse } from './types';
 
-export async function getProjects(): Promise<Project[]> {
-	return apiRequest<Project[]>('/projects');
+export async function getProjects(customFetch?: typeof fetch): Promise<Project[]> {
+	return apiRequest<Project[]>('/projects', { fetch: customFetch });
 }
 
-export async function getProject(id: number): Promise<Project> {
-	return apiRequest<Project>(`/projects/${id}`);
+export async function getProject(id: number, customFetch?: typeof fetch): Promise<Project> {
+	return apiRequest<Project>(`/projects/${id}`, { fetch: customFetch });
 }
 
-export async function getProjectsByType(type: ProjectType): Promise<Project[]> {
-	return apiRequest<Project[]>(`/projects/type/${type}`);
+export async function getProjectsByType(type: ProjectType, customFetch?: typeof fetch): Promise<Project[]> {
+	return apiRequest<Project[]>(`/projects/type/${type}`, { fetch: customFetch });
 }
 
-export async function addProject(data: ProjectInput): Promise<Project> {
+export async function addProject(data: ProjectInput, customFetch?: typeof fetch): Promise<Project> {
 	return apiRequest<Project>('/projects/add', {
 		method: 'POST',
-		body: data
+		body: data,
+		fetch: customFetch
 	});
 }
 
-export async function updateProject(id: number, data: ProjectUpdate): Promise<Project> {
+export async function updateProject(id: number, data: ProjectUpdate, customFetch?: typeof fetch): Promise<Project> {
 	return apiRequest<Project>(`/projects/update/${id}`, {
 		method: 'PUT',
-		body: data
+		body: data,
+		fetch: customFetch
 	});
 }
 
-export async function deleteProject(id: number): Promise<MessageResponse> {
+export async function deleteProject(id: number, customFetch?: typeof fetch): Promise<MessageResponse> {
 	return apiRequest<MessageResponse>(`/projects/delete/${id}`, {
-		method: 'DELETE'
+		method: 'DELETE',
+		fetch: customFetch
 	});
 }
 
-export async function reorderProjects(orders: ProjectOrder[]): Promise<MessageResponse> {
+export async function reorderProjects(orders: ProjectOrder[], customFetch?: typeof fetch): Promise<MessageResponse> {
 	return apiRequest<MessageResponse>('/projects/order', {
 		method: 'PUT',
-		body: orders
+		body: orders,
+		fetch: customFetch
 	});
 }
