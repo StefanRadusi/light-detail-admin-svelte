@@ -1,16 +1,30 @@
 <script lang="ts">
 	import type { HTMLInputAttributes } from 'svelte/elements';
+	import clsx from 'clsx';
+	import { onMount } from 'svelte';
 
 	let {
 		label,
 		value = $bindable(''),
+		class: className,
+		focusOnMount = false,
 		...rest
-	}: { label: string; value?: string } & HTMLInputAttributes = $props();
+	}: { label?: string; value?: string; class?: string; focusOnMount?: boolean } & HTMLInputAttributes = $props();
+
+	let inputRef: HTMLInputElement;
+
+	onMount(() => {
+		if (focusOnMount) {
+			inputRef?.focus();
+		}
+	});
 </script>
 
-<div class="field">
-	<label for={rest.id}>{label}</label>
-	<input bind:value {...rest} />
+<div class={clsx('field', className)}>
+	{#if label}
+		<label for={rest.id}>{label}</label>
+	{/if}
+	<input bind:this={inputRef} bind:value {...rest} />
 </div>
 
 <style>

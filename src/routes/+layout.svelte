@@ -1,8 +1,8 @@
 <script lang="ts">
 	import '../app.css';
 	import { Header } from '$lib';
-	import ImagePreview from '$lib/components/others/ImagePreview.svelte';
-	import Popup from '$lib/components/others/Popup.svelte';
+	import ImagePreview from '$lib/components/overlays/ImagePreview.svelte';
+	import Popup from '$lib/components/overlays/Popup.svelte';
 
 	let { children } = $props();
 </script>

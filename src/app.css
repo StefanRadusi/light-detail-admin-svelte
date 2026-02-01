@@ -29,6 +29,15 @@
 	padding: 0;
 }
 
+button {
+	border: none;
+	background: none;
+	cursor: pointer;
+	font: inherit;
+	color: inherit;
+	padding: 0;
+}
+
 html,
 body {
 	font-family: var(--font-sans);
@@ -58,4 +67,34 @@ body {
 .flex-col {
 	display: flex;
 	flex-direction: column;
+}
+
+/* Custom Scrollbar */
+* {
+	scrollbar-width: thin;
+	scrollbar-color: var(--color-primary) var(--color-surface);
+}
+
+*::-webkit-scrollbar {
+	width: 8px;
+	height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+	background: var(--color-surface);
+	border-radius: 4px;
+}
+
+*::-webkit-scrollbar-thumb {
+	background: var(--color-primary);
+	border-radius: 4px;
+	transition: background 0.2s ease;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+	background: #d9a02e;
+}
+
+*::-webkit-scrollbar-corner {
+	background: var(--color-surface);
 }

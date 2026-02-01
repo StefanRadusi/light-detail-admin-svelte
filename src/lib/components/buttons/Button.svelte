@@ -27,11 +27,9 @@
 		padding: 8px;
 		background-color: var(--color-primary);
 		color: var(--color-text);
-		border: none;
 		border-radius: 4px;
 		font-size: var(--font-size-body);
 		font-weight: 600;
-		cursor: pointer;
 		transition: opacity 0.2s;
 		display: flex;
 	}

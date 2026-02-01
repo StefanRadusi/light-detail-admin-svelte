@@ -2,13 +2,17 @@
 	import { fade } from 'svelte/transition';
 	import clsx from 'clsx';
 
-	let { class: className, visible = true }: { class?: string; visible?: boolean } = $props();
+	let {
+		class: className,
+		visible = true,
+		variant = 'default'
+	}: { class?: string; visible?: boolean; variant?: 'default' | 'light' } = $props();
 </script>
 
 {#if visible}
 	<svg
 		transition:fade
-		class={clsx('loading', className)}
+		class={clsx('loading', variant === 'light' && 'light', className)}
 		width="16"
 		height="16"
 		viewBox="0 0 48 48"
@@ -25,6 +29,10 @@
 {/if}
 
 <style>
+	.light .draw {
+		stroke: var(--color-primary);
+	}
+
 	.draw {
 		stroke-dasharray: 160;
 		stroke-dashoffset: 160;

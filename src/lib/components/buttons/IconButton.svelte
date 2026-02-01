@@ -12,10 +12,8 @@
 <style>
 	button {
 		background-color: rgba(0, 0, 0, 0.6);
-		border: none;
 		border-radius: 4px;
 		color: white;
-		cursor: pointer;
 		padding: 8px;
 		display: flex;
 		align-items: center;
