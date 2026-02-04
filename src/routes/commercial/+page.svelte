@@ -1,2 +1,7 @@
-<h1>Commercial</h1>
-<p>Commercial services page.</p>
+<script lang="ts">
+	import { ProjectsPage } from '$lib';
+
+	let { data } = $props();
+</script>
+
+<ProjectsPage title="Commercial" type="commercial" projects={data.projects} />

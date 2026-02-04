@@ -3,6 +3,7 @@ export { default as PageContent } from './components/layout/PageContent.svelte';
 
 // Project components
 export { default as ProjectItem } from './components/project/ProjectItem.svelte';
+export { default as ProjectsPage } from './components/project/ProjectsPage.svelte';
 
 // Navigation components
 export { default as Header } from './components/navigation/Header.svelte';
@@ -17,6 +18,7 @@ export { default as Input } from './components/form/Input.svelte';
 export { default as EditableTitle } from './components/form/EditableTitle.svelte';
 export { default as EditableDescription } from './components/form/EditableDescription.svelte';
 export { default as EditableTags } from './components/form/EditableTags.svelte';
+export { default as EditableOrder } from './components/form/EditableOrder.svelte';
 
 // Button components
 export { default as Button } from './components/buttons/Button.svelte';

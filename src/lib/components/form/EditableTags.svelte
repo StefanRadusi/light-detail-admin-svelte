@@ -36,7 +36,6 @@
 	function removeTag(tag: string) {
 		editTags = editTags.filter((t) => t !== tag);
 	}
-
 	async function save() {
 		const tagsChanged = JSON.stringify(editTags) !== JSON.stringify(tags);
 		if (tagsChanged) {

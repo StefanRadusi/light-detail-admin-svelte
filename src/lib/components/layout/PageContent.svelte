@@ -3,8 +3,12 @@
 	import type { Snippet } from 'svelte';
 	import Body from '../typography/Body.svelte';
 
-	let { title, subtitle, children }: { title: string; subtitle: string; children: Snippet } =
-		$props();
+	let {
+		title,
+		subtitle,
+		children,
+		action
+	}: { title: string; subtitle: string; children: Snippet; action?: Snippet } = $props();
 </script>
 
 <div class="page-content">
@@ -13,6 +17,11 @@
 			<Body class="subtitle">{subtitle}</Body>
 			<div class="separator"></div>
 			<Title class="title">{title}</Title>
+			{#if action}
+				<div class="action">
+					{@render action()}
+				</div>
+			{/if}
 		</div>
 
 		<div></div>
@@ -43,6 +52,11 @@
 
 	.title-container :global(.title) {
 		margin-top: 20px;
+	}
+
+	.action {
+		margin-left: auto;
+		align-self: flex-end;
 	}
 
 	.separator {

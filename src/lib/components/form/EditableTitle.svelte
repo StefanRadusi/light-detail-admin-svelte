@@ -1,21 +1,23 @@
 <script lang="ts">
 	import { Input, Subtitle, SmallLoadingAnimation, ActionButton } from '$lib';
-	import { Pencil, Check, X } from '@lucide/svelte';
+	import { Pencil, Check, X, Plus } from '@lucide/svelte';
 
 	let {
-		value,
+		value = '',
 		onSave
 	}: {
-		value: string;
+		value?: string;
 		onSave: (newValue: string) => Promise<void>;
 	} = $props();
+
+	let isEmpty = $derived(!value);
 
 	let isEditing = $state(false);
 	let isSaving = $state(false);
 	let editValue = $state('');
 
 	function startEditing() {
-		editValue = value;
+		editValue = value ?? '';
 		isEditing = true;
 	}
 
@@ -67,6 +69,11 @@
 		<ActionButton variant="cancel" onclick={cancel} disabled={isSaving} aria-label="Cancel">
 			<X size={16} />
 		</ActionButton>
+	{:else if isEmpty}
+		<button class="add-btn" onclick={startEditing}>
+			<Plus size={14} />
+			Add title
+		</button>
 	{:else}
 		<Subtitle>{value}</Subtitle>
 		<ActionButton variant="edit" onclick={startEditing} aria-label="Edit title">
@@ -91,5 +98,18 @@
 		font-weight: 600;
 		color: var(--color-text);
 		padding: 2px 0px;
+	}
+
+	.add-btn {
+		display: flex;
+		align-items: center;
+		gap: 4px;
+		color: var(--color-text-muted);
+		font-size: var(--font-size-subtitle);
+		font-weight: 600;
+	}
+
+	.add-btn:hover {
+		color: var(--color-text);
 	}
 </style>
