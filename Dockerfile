@@ -14,4 +14,4 @@ RUN mkdir -p data && chown -R bun:bun data
 VOLUME /app/data
 
 USER bun
-ENTRYPOINT [ "bun", "run", "run:container" ]
+CMD ["bun", "build/index.js"]
