@@ -1,4 +1,4 @@
-import { redirect, type Handle } from '@sveltejs/kit';
+import { redirect, type Handle, type HandleServerError } from '@sveltejs/kit';
 
 const publicRoutes = ['/login'];
 
@@ -33,4 +33,11 @@ export const handle: Handle = async ({ event, resolve }) => {
 	}
 
 	return resolve(event);
+};
+
+export const handleError: HandleServerError = ({ error }) => {
+	console.error('Error:', error);
+	return {
+		message: 'Internal Error'
+	};
 };
