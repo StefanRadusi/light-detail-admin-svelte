@@ -3,6 +3,7 @@
 	import { Header } from '$lib';
 	import ImagePreview from '$lib/components/overlays/ImagePreview.svelte';
 	import Popup from '$lib/components/overlays/Popup.svelte';
+	import Snackbar from '$lib/components/overlays/Snackbar.svelte';
 
 	let { children } = $props();
 </script>
@@ -16,6 +17,7 @@
 
 <ImagePreview />
 <Popup />
+<Snackbar />
 
 <style>
 	.app-container {

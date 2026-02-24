@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Button, IconButton, SmallLoadingAnimation } from '$lib';
 	import { ImageIcon, Trash2, Upload, X } from '@lucide/svelte';
-	import { getImageId } from '$lib/api/images';
+	import { getImageId, getImageUrl } from '$lib/api/images';
 	import { openPreview } from '$lib/state/imagePreviewState.svelte';
 	import { fade } from 'svelte/transition';
 
@@ -72,11 +72,11 @@
 			>
 				<Upload size={24} />
 			</Button>
-			{#each images as img, i (getImageId(img))}
+			{#each images as img, i (img)}
 				{@const isLoading = loadingImageId === getImageId(img)}
 				<div class="thumbnail-wrapper">
 					<button class="thumbnail" onclick={() => openPreview(images, i)} disabled={isLoading}>
-						<img src={img} alt="" />
+						<img src={getImageUrl(img)} alt="" />
 					</button>
 					{#if isLoading}
 						<div class="thumbnail-loader" transition:fade>

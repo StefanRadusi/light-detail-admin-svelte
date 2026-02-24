@@ -6,7 +6,8 @@
 	const authNavItems = [
 		{ href: '/residential', label: 'Residential' },
 		{ href: '/commercial', label: 'Commercial' },
-		{ href: '/stuff', label: 'Stuff' }
+		{ href: '/stuff', label: 'Stuff' },
+		{ href: '/content', label: 'Content' }
 	];
 
 	let isLoginPage = $derived(page.url.pathname === '/login');

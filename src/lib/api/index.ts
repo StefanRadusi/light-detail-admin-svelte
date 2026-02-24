@@ -20,3 +20,18 @@ export {
 
 // Images
 export { getImageUrl, uploadImage } from './images';
+
+// Videos
+export { getVideoUrl, uploadVideo, deleteVideo } from './videos';
+
+// Content
+export {
+	getContent,
+	getContentTree,
+	getContentTreeByKey,
+	getContentItem,
+	addContent,
+	updateContent,
+	deleteContent,
+	reorderContent
+} from './content';

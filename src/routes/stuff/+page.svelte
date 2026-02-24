@@ -1,2 +1,6 @@
-<h1>Stuff</h1>
-<p>Stuff management page.</p>
+<script lang="ts">
+	import { StaffPage } from '$lib';
+	let { data } = $props();
+</script>
+
+<StaffPage title="Stuff" staffList={data.staffList} />

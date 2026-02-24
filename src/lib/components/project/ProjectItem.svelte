@@ -1,32 +1,25 @@
 <script lang="ts">
-	import type { Project } from '$lib/api/types';
+	import type { ProjectState } from '$lib/api/types';
 	import { Button, EditableTitle, EditableDescription, EditableTags, EditableOrder } from '$lib';
 	import { Images, Trash2, Plus, X } from '@lucide/svelte';
 	import { openPopup } from '$lib/state/popupState.svelte';
 	import GalleryOverlay from './GalleryOverlay.svelte';
+	import { getImageUrl } from '$lib/api';
 
 	let {
 		project,
 		onDelete,
 		onUploadImage,
 		onDeleteImage,
-		onSetCover,
-		onUpdateTitle,
-		onUpdateDescription,
-		onUpdateTags,
-		onUpdateOrder,
+		onUpdate,
 		onAdd,
 		onCancel
 	}: {
-		project: Project;
+		project: ProjectState;
 		onDelete?: (id: number) => void;
 		onUploadImage?: (projectId: number, file: File) => Promise<void>;
 		onDeleteImage?: (projectId: number, imageUrl: string) => Promise<void>;
-		onSetCover?: (projectId: number, imageUrl: string) => Promise<void>;
-		onUpdateTitle: (projectId: number, title: string) => Promise<void>;
-		onUpdateDescription: (projectId: number, description: string) => Promise<void>;
-		onUpdateTags: (projectId: number, tags: string[]) => Promise<void>;
-		onUpdateOrder: (projectId: number, order: number) => Promise<void>;
+		onUpdate: <K extends keyof ProjectState>(projectId: number, value: ProjectState[K], key: K) => Promise<void>;
 		onAdd?: () => Promise<void>;
 		onCancel?: () => void;
 	} = $props();
@@ -50,7 +43,7 @@
 <article class="project-item flex-row" class:create-mode={isCreateMode}>
 	<div class="cover-container">
 		{#if project.coverImageUrl}
-			<img src={project.coverImageUrl} alt={project.title} class="cover" />
+			<img src={getImageUrl(project.coverImageUrl)} alt={project.title} class="cover" />
 		{:else}
 			<div class="cover placeholder"></div>
 		{/if}
@@ -58,29 +51,37 @@
 
 	<div class="info-container flex-col">
 		<div class="content">
+			{#if !isCreateMode}
+				<span class="id-label">ID: {project.id}</span>
+			{/if}
 			<div class="title-row">
 				{#if !isCreateMode}
 					<EditableOrder
 						value={project.order ?? 1}
-						onSave={(order) => onUpdateOrder(project.id, order)}
+						onSave={(order) => onUpdate(project.id, order, 'order')}
 					/>
 					<span class="separator"></span>
 				{/if}
-				<EditableTitle value={project.title} onSave={(title) => onUpdateTitle(project.id, title)} />
+				<EditableTitle value={project.title} onSave={(title) => onUpdate(project.id, title, 'title')} />
 			</div>
 			<EditableDescription
-				value={project.description}
-				onSave={(description) => onUpdateDescription(project.id, description)}
+				value={project.description ?? ''}
+				onSave={(description: string) => onUpdate(project.id, description, 'description')}
 			/>
 
-			<EditableTags tags={project.tags ?? []} onSave={(tags) => onUpdateTags(project.id, tags)} />
+			<EditableTags tags={project.tags} onSave={(tags) => onUpdate(project.id, tags, 'tags')} />
 
 			<div class="actions">
 				{#if isCreateMode}
 					<Button variant="secondary" onclick={onCancel}>
 						<X size={18} />
 					</Button>
-					<Button variant="primary" onclick={handleAdd} loading={isAdding}>Add New Projects</Button>
+					<Button
+						variant="primary"
+						onclick={handleAdd}
+						loading={isAdding}
+						disabled={!project.title?.trim()}>Add New Projects</Button
+					>
 				{:else}
 					<Button class="gallery-btn" onclick={() => (showGallery = !showGallery)}>
 						<Images size={18} />
@@ -106,7 +107,7 @@
 				onClose={() => (showGallery = false)}
 				onUpload={(file) => onUploadImage!(project.id, file)}
 				onDeleteImage={(url) => onDeleteImage!(project.id, url)}
-				onSetCover={(url) => onSetCover!(project.id, url)}
+				onSetCover={(url) => onUpdate(project.id, url, 'coverImageUrl')}
 			/>
 		{/if}
 	</div>
@@ -153,6 +154,12 @@
 		display: flex;
 		flex-direction: column;
 		gap: 12px;
+	}
+
+	.id-label {
+		font-size: 11px;
+		color: var(--color-text-muted);
+		opacity: 0.6;
 	}
 
 	.title-row {

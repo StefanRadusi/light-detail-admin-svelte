@@ -5,6 +5,13 @@ export { default as PageContent } from './components/layout/PageContent.svelte';
 export { default as ProjectItem } from './components/project/ProjectItem.svelte';
 export { default as ProjectsPage } from './components/project/ProjectsPage.svelte';
 
+// Staff components
+export { default as StaffItem } from './components/staff/StaffItem.svelte';
+export { default as StaffPage } from './components/staff/StaffPage.svelte';
+
+// Content components
+export { default as ContentPage } from './components/content/ContentPage.svelte';
+
 // Navigation components
 export { default as Header } from './components/navigation/Header.svelte';
 

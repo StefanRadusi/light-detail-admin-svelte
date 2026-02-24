@@ -4,9 +4,11 @@
 
 	let {
 		value = '',
+		label = 'title',
 		onSave
 	}: {
 		value?: string;
+		label?: string;
 		onSave: (newValue: string) => Promise<void>;
 	} = $props();
 
@@ -72,11 +74,11 @@
 	{:else if isEmpty}
 		<button class="add-btn" onclick={startEditing}>
 			<Plus size={14} />
-			Add title
+			Add {label}
 		</button>
 	{:else}
 		<Subtitle>{value}</Subtitle>
-		<ActionButton variant="edit" onclick={startEditing} aria-label="Edit title">
+		<ActionButton variant="edit" onclick={startEditing} aria-label="Edit {label}">
 			<Pencil size={14} />
 		</ActionButton>
 	{/if}

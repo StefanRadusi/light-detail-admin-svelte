@@ -1,10 +1,11 @@
 <script lang="ts">
-	import { uploadImage, getImageUrl, getImageId, deleteImage } from '$lib/api/images';
+	import { uploadImage, getImageId, deleteImage } from '$lib/api/images';
 	import { deleteProject, updateProject, addProject } from '$lib/api/projects';
 	import { PageContent, ProjectItem, Button } from '$lib';
-	import type { Project, ProjectType } from '$lib/api/types';
+	import type { Project, ProjectState, ProjectType } from '$lib/api/types';
 	import { invalidateAll } from '$app/navigation';
 	import { Plus } from '@lucide/svelte';
+	import { showSnackbar } from '$lib/state/snackbarState.svelte';
 
 	let {
 		title,
@@ -16,13 +17,18 @@
 		projects: Project[];
 	} = $props();
 
-	let newProject = $state<Project | null>(null);
+	let newProject = $state<ProjectState | null>(null);
+	// svelte-ignore state_referenced_locally
+	let projects = $state(initialProjects);
 
 	function handleStartCreate() {
 		newProject = {
 			id: -1,
 			title: '',
-			type
+			type,
+			tags: [],
+			imgs: [],
+			order: 0
 		};
 	}
 
@@ -37,44 +43,33 @@
 		await invalidateAll();
 		newProject = null;
 		projects = initialProjects;
+		showSnackbar('New project added', 'success');
 	}
 
-	function handleNewProjectUpdateTitle(_id: number, title: string) {
-		if (newProject) newProject.title = title;
+	function handleNewProjectUpdate<K extends keyof ProjectState>(
+		_id: number,
+		value: ProjectState[K],
+		key: K
+	) {
+		if (newProject) newProject[key] = value;
 		return Promise.resolve();
 	}
-
-	function handleNewProjectUpdateDescription(_id: number, description: string) {
-		if (newProject) newProject.description = description;
-		return Promise.resolve();
-	}
-
-	function handleNewProjectUpdateTags(_id: number, tags: string[]) {
-		if (newProject) newProject.tags = tags;
-		return Promise.resolve();
-	}
-
-	function handleNewProjectUpdateOrder(_id: number, order: number) {
-		if (newProject) newProject.order = order;
-		return Promise.resolve();
-	}
-
-	// svelte-ignore state_referenced_locally
-	let projects = $state(initialProjects);
 
 	async function handleDelete(id: number) {
 		await deleteProject(id);
 		projects = projects.filter((p) => p.id !== id);
+		showSnackbar('Project deleted', 'success');
 	}
 
 	async function handleUploadImage(projectId: number, file: File) {
 		const { filename } = await uploadImage(file);
-		const imageUrl = getImageUrl(filename);
+		const imageUrl = `/images/get/${filename}`;
 
 		const idx = projects.findIndex((p) => p.id === projectId);
 		const updatedImgs = [imageUrl, ...(projects[idx]?.imgs ?? [])];
 		await updateProject(projectId, { imgs: updatedImgs });
 		projects[idx].imgs = updatedImgs;
+		showSnackbar('Image uploaded', 'success');
 	}
 
 	async function handleDeleteImage(projectId: number, imageUrl: string) {
@@ -83,38 +78,23 @@
 		const updatedImgs = (projects[idx]?.imgs ?? []).filter((img: string) => img !== imageUrl);
 		await updateProject(projectId, { imgs: updatedImgs });
 		projects[idx].imgs = updatedImgs;
+		showSnackbar('Image deleted', 'success');
 	}
 
-	async function handleSetCover(projectId: number, imageUrl: string) {
-		const idx = projects.findIndex((p) => p.id === projectId);
-		await updateProject(projectId, { coverImageUrl: imageUrl });
-		projects[idx].coverImageUrl = imageUrl;
-	}
-
-	async function handleUpdateTitle(projectId: number, title: string) {
-		const idx = projects.findIndex((p) => p.id === projectId);
-		await updateProject(projectId, { title });
-		projects[idx].title = title;
-	}
-
-	async function handleUpdateDescription(projectId: number, description: string) {
-		const idx = projects.findIndex((p) => p.id === projectId);
-		await updateProject(projectId, { description });
-		projects[idx].description = description;
-	}
-
-	async function handleUpdateTags(projectId: number, tags: string[]) {
-		const idx = projects.findIndex((p) => p.id === projectId);
-		await updateProject(projectId, { tags });
-		projects[idx].tags = tags;
-	}
-
-	async function handleUpdateOrder(projectId: number, order: number) {
-		const idx = projects.findIndex((p) => p.id === projectId);
-		await updateProject(projectId, { order });
-		projects[idx].order = order;
-		await invalidateAll();
-		projects = initialProjects;
+	async function handleUpdateField<K extends keyof ProjectState>(
+		projectId: number,
+		value: ProjectState[K],
+		key: K
+	) {
+		await updateProject(projectId, { [key]: value });
+		if (key === 'order') {
+			await invalidateAll();
+			projects = initialProjects;
+		} else {
+			const idx = projects.findIndex((p) => p.id === projectId);
+			(projects[idx] as ProjectState)[key] = value;
+		}
+		showSnackbar('Project updated', 'success');
 	}
 </script>
 
@@ -130,10 +110,7 @@
 				project={newProject}
 				onAdd={handleAdd}
 				onCancel={handleCancelCreate}
-				onUpdateTitle={handleNewProjectUpdateTitle}
-				onUpdateDescription={handleNewProjectUpdateDescription}
-				onUpdateTags={handleNewProjectUpdateTags}
-				onUpdateOrder={handleNewProjectUpdateOrder}
+				onUpdate={handleNewProjectUpdate}
 			/>
 		{/if}
 		{#each projects as project (project.id)}
@@ -142,11 +119,7 @@
 				onDelete={handleDelete}
 				onUploadImage={handleUploadImage}
 				onDeleteImage={handleDeleteImage}
-				onSetCover={handleSetCover}
-				onUpdateTitle={handleUpdateTitle}
-				onUpdateDescription={handleUpdateDescription}
-				onUpdateTags={handleUpdateTags}
-				onUpdateOrder={handleUpdateOrder}
+				onUpdate={handleUpdateField}
 			/>
 		{/each}
 	</div>

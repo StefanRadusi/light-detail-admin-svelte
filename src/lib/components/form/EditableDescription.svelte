@@ -8,7 +8,7 @@
 		value = '',
 		onSave
 	}: {
-		value?: string;
+		value: string;
 		onSave: (newValue: string) => Promise<void>;
 	} = $props();
 

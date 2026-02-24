@@ -9,6 +9,8 @@ export interface Staff {
 	createdAt?: number;
 }
 
+export type StaffState = Omit<Staff, 'createdAt' | 'updatedAt'>;
+
 export interface StaffInput {
 	name: string;
 	author?: string;
@@ -26,12 +28,14 @@ export interface Project {
 	coverImageUrl?: string;
 	description?: string;
 	latestPosition?: number;
-	tags?: string[];
-	imgs?: string[];
-	updatedAt?: number;
-	createdAt?: number;
-	order?: number;
+	tags: string[];
+	imgs: string[];
+	updatedAt: number;
+	createdAt: number;
+	order: number;
 }
+
+export type ProjectState = Omit<Project, 'createdAt' | 'updatedAt'>;
 
 export interface ProjectInput {
 	title: string;
@@ -63,6 +67,54 @@ export interface ProjectOrder {
 
 // Image types
 export interface ImageUploadResponse {
+	message: string;
+	filename: string;
+	size: string;
+}
+
+// Content types
+export type ContentType = 'text' | 'image' | 'video' | 'section';
+
+export interface ContentItem {
+	id: number;
+	key: string;
+	value?: string;
+	type: ContentType;
+	parentId?: number;
+	order?: number;
+	metadata?: Record<string, unknown>;
+	createdAt?: number;
+	updatedAt?: number;
+	children?: ContentItem[];
+}
+
+export type ContentItemState = Omit<ContentItem, 'createdAt' | 'updatedAt'>;
+
+export interface ContentInput {
+	key: string;
+	type: ContentType;
+	value?: string;
+	parentId?: number;
+	order?: number;
+	metadata?: Record<string, unknown>;
+}
+
+export interface ContentUpdate {
+	key?: string;
+	value?: string;
+	type?: ContentType;
+	parentId?: number;
+	order?: number;
+	metadata?: Record<string, unknown>;
+}
+
+export interface ContentOrder {
+	id: number;
+	order: number;
+}
+
+// Video types
+export interface VideoUploadResponse {
 	message: string;
 	filename: string;
 	size: string;
