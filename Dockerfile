@@ -1,16 +1,17 @@
-FROM oven/bun:1 AS builder
+# use the official Bun image
+# see all versions at https://hub.docker.com/r/oven/bun/tags
+FROM oven/bun:1 AS base
 WORKDIR /app
-COPY package.json bun.lockb ./
-RUN bun install --frozen-lockfile
-COPY . .
-RUN bun run build
 
-FROM oven/bun:1
-WORKDIR /app
-COPY --from=builder /app/build ./build
-COPY --from=builder /app/package.json ./
-RUN bun install --production --frozen-lockfile
-EXPOSE 3000
-ENV HOST=0.0.0.0
-ENV PORT=3000
-CMD ["bun", "run", "build/index.js"]
+# Install dependencies first (better layer caching)
+COPY bun.lock ./
+RUN bun install --frozen-lockfile
+
+# Copy source code
+COPY . .
+
+RUN mkdir -p data && chown -R bun:bun data
+VOLUME /app/data
+
+USER bun
+ENTRYPOINT [ "bun", "run", "run:container" ]
