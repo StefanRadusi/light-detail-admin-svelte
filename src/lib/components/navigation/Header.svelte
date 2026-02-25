@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { PUBLIC_API_BASE_URL } from '$env/static/public';
 	import { page } from '$app/state';
 	import { LogOut } from '@lucide/svelte';
 	import { Title, Subtitle, Body, IconButton } from '$lib';
@@ -14,7 +15,7 @@
 	let navItems = $derived(isLoginPage ? [] : authNavItems);
 
 	async function handleLogout() {
-		await fetch('http://localhost:3001/api/auth/sign-out', {
+		await fetch(`${PUBLIC_API_BASE_URL}/api/auth/sign-out`, {
 			method: 'POST',
 			credentials: 'include'
 		});
