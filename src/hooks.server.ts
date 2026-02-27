@@ -13,6 +13,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 		}
 	});
 
+	console.log(sessionResponse);
+
 	const session = sessionResponse.ok ? await sessionResponse.json() : null;
 
 	const isLoggedIn = !!session?.user;
