@@ -14,7 +14,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 	});
 
 	const session = sessionResponse.ok ? await sessionResponse.json() : null;
-	console.log(session);
 
 	const isLoggedIn = !!session?.user;
 	const isAdmin = session?.user?.role === 'admin';
