@@ -10,14 +10,14 @@
 		onSave: (newValue: number) => Promise<void>;
 	} = $props();
 
-	let isEmpty = $derived(value === 0);
+	let isEmpty = $derived(value === null || value === undefined);
 
 	let isEditing = $state(false);
 	let isSaving = $state(false);
 	let editValue = $state(1);
 
 	function startEditing() {
-		editValue = value || 1;
+		editValue = value ?? 0;
 		isEditing = true;
 	}
 
